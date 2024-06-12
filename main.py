@@ -2,6 +2,8 @@
 # Main location for data recovery based on OCR for salvaging info from images.
 # @author Ryan Magnuson rmagnuson@westmont.edu
 
+# DOCUMENTATION: https://www.jaided.ai/easyocr/documentation/
+
 # TODO: EasyOCR is big. Use the following to remove:
 # pip uninstall easyocr
 #
@@ -14,10 +16,20 @@
 import easyocr
 from autocorrect import Speller
 
+# Improve Image Quality
+# WIP
+
 # Create Reader
-ocr = easyocr.Reader(['en']) # TODO: Only run this line once! (allegedly)
-result = ocr.readtext('images/'+'test.jpg')
+ocr = easyocr.Reader(['en'])
+result = ocr.readtext('images/'+'westmont_catalog_5.jpg', detail=0, text_threshold=.6, width_ths=.5)
 
 print(result)
+
 # Spell Checker
-sc = Speller(only_replacements=True)
+# sc = Speller(only_replacements=True)
+# checked_result = []
+#
+# for unchecked in result:
+#   checked_result.append(sc(unchecked))
+#
+# print(checked_result)
