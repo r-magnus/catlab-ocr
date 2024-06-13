@@ -18,21 +18,24 @@ import os
 # from autocorrect import Speller
 from spellchecker import SpellChecker
 
-# Improve Image Quality
+# Image Sharpening
 # WIP
 
 # Main Reader
 ocr = easyocr.Reader(['en'])
-for img in os.listdir("images/"):
-  result = ocr.readtext("images/" + img, detail=0, text_threshold=.6, width_ths=.1, paragraph=True)
-  # NOTE: If 'paragraph=True' doesn't always work, do manual sort with bounding boxes (detail=1)
-  print(result)
+path = "images/"
+for box in os.listdir(path):
+  path = path + box + "/"
+  for img in os.listdir(path):
+    result = ocr.readtext(path + img, detail=0, text_threshold=.6, width_ths=.1, paragraph=True)
+    # NOTE: If 'paragraph=True' doesn't always work, do manual sort with bounding boxes (detail=1)
+    print(result)
 
-  # Spell Check (CURRENTLY NOT WORKING)
-  # sc = SpellChecker() # only_replacements=True
-  # checked = []
-  # for section in result:
-  #   checked.append(sc.correction(section))
-  # print(checked)
+    # Spell Check (CURRENTLY VERY INACCURATE)
+    # sc = SpellChecker() # only_replacements=True
+    # checked = []
+    # for section in result:
+    #   checked.append(sc.correction(section))
+    # print(checked)
 
-  input() # manual delay
+    input() # manual delay
