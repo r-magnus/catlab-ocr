@@ -23,13 +23,19 @@ from spellchecker import SpellChecker
 
 # Main Reader
 ocr = easyocr.Reader(['en'])
+pages = []
 path = "images/"
-for box in os.listdir(path):
+for box in sorted(os.listdir(path)):
+  print("Box: %s" % (box))
+  path = "images/"
   path = path + box + "/"
-  for img in os.listdir(path):
+  for img in sorted(os.listdir(path)):
+    print("File: %s" % (img))
     result = ocr.readtext(path + img, detail=0, text_threshold=.6, width_ths=.1, paragraph=True)
+    result.insert(0, str(img))
     # NOTE: If 'paragraph=True' doesn't always work, do manual sort with bounding boxes (detail=1)
-    print(result)
+    print("Content: %s" % (result))
+    pages.append(result)
 
     # Spell Check (CURRENTLY VERY INACCURATE)
     # sc = SpellChecker() # only_replacements=True
@@ -38,4 +44,11 @@ for box in os.listdir(path):
     #   checked.append(sc.correction(section))
     # print(checked)
 
-    input() # manual delay
+    if input('> ') == 'q': break # manual delay
+
+# File Writing
+for page in pages:
+  file = open("pages/%s.txt" % (page[0].replace(".jpg", "")), 'w')
+  for line in page:
+    file.write(line + "\n")
+  file.close()
