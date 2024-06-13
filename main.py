@@ -19,7 +19,8 @@ import os
 from spellchecker import SpellChecker
 
 # Image Sharpening
-# WIP
+# TODO: Implement image sharpening to improve OCR accuracy.
+# NOTE: Making a manual list of images that need sharpening will probably be best
 
 # Main Reader
 ocr = easyocr.Reader(['en'])
@@ -27,10 +28,12 @@ pages = []
 path = "images/"
 for box in sorted(os.listdir(path)):
   print("Box: %s" % (box))
+
   path = "images/"
   path = path + box + "/"
   for img in sorted(os.listdir(path)):
     print("File: %s" % (img))
+
     result = ocr.readtext(path + img, detail=0, text_threshold=.6, width_ths=.1, paragraph=True)
     result.insert(0, str(img))
     # NOTE: If 'paragraph=True' doesn't always work, do manual sort with bounding boxes (detail=1)
@@ -48,7 +51,7 @@ for box in sorted(os.listdir(path)):
 
 # File Writing
 for page in pages:
-  file = open("pages/%s.txt" % (page[0].replace(".jpg", "")), 'w')
+  file = open("pages/%s.txt" % (page[0].replace(".jpg", "").replace("000", "")), 'w')
   for line in page:
     file.write(line + "\n")
   file.close()
