@@ -34,8 +34,10 @@ for box in sorted(os.listdir(path)):
   for img in sorted(os.listdir(path)):
     print("File: %s" % (img))
 
-    result = ocr.readtext(path + img, detail=0, text_threshold=.6, width_ths=.1, paragraph=True)
-    result.insert(0, str(img))
+    result = ocr.readtext(path + img, detail=0, text_threshold=.6, width_ths=.1, paragraph=True,
+                          contrast_ths=.1, decoder="greedy",
+                          ) # NOTE: ~4.73sec per page
+    result.insert(0, str(img).replace("000", ""))
     # NOTE: If 'paragraph=True' doesn't always work, do manual sort with bounding boxes (detail=1)
     print("Content: %s" % (result))
     pages.append(result)
