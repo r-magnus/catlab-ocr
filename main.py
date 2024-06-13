@@ -22,25 +22,37 @@ from spellchecker import SpellChecker
 # TODO: Implement image sharpening to improve OCR accuracy.
 # NOTE: Making a manual list of images that need sharpening will probably be best
 
+# File Writing
+def write_page(page):
+  """
+  Given a list of lines, opens a new .txt and writes each line.
+  :param page: List of lines to write. Also serves as .txt file name.
+  """
+  file = open("pages/%s.txt" % (page[0].replace(".jpg", "").replace("000", "")), 'w')
+  for line in page:
+    file.write(line + "\n")
+  file.close()
+
 # Main Reader
 ocr = easyocr.Reader(['en'])
-pages = []
 path = "images/"
 for box in sorted(os.listdir(path)):
-  print("Box: %s" % (box))
+  print("Box: %s" % (box)) # debug sout
 
   path = "images/"
   path = path + box + "/"
   for img in sorted(os.listdir(path)):
-    print("File: %s" % (img))
+    print("File: %s" % (img)) # debug sout
 
     result = ocr.readtext(path + img, detail=0, text_threshold=.6, width_ths=.1, paragraph=True,
                           contrast_ths=.1, decoder="greedy",
                           ) # NOTE: ~4.73sec per page
     result.insert(0, str(img).replace("000", ""))
     # NOTE: If 'paragraph=True' doesn't always work, do manual sort with bounding boxes (detail=1)
-    print("Content: %s" % (result))
-    pages.append(result)
+    print("Content: %s" % (result)) # debug sout
+
+    # pages.append(result)
+    write_page(result)
 
     # Spell Check (CURRENTLY VERY INACCURATE)
     # sc = SpellChecker() # only_replacements=True
@@ -50,10 +62,3 @@ for box in sorted(os.listdir(path)):
     # print(checked)
 
     if input('> ') == 'q': break # manual delay
-
-# File Writing
-for page in pages:
-  file = open("pages/%s.txt" % (page[0].replace(".jpg", "").replace("000", "")), 'w')
-  for line in page:
-    file.write(line + "\n")
-  file.close()
