@@ -14,22 +14,25 @@
 
 # Setup
 import easyocr
-from autocorrect import Speller
+import os
+# from autocorrect import Speller
+from spellchecker import SpellChecker
 
 # Improve Image Quality
 # WIP
 
-# Create Reader
+# Main Reader
 ocr = easyocr.Reader(['en'])
-result = ocr.readtext('images/'+'westmont_catalog_5.jpg', detail=0, text_threshold=.6, width_ths=.5)
+for img in os.listdir("images/"):
+  result = ocr.readtext("images/" + img, detail=0, text_threshold=.6, width_ths=.1, paragraph=True)
+  # NOTE: If 'paragraph=True' doesn't always work, do manual sort with bounding boxes (detail=1)
+  print(result)
 
-print(result)
+  # Spell Check (CURRENTLY NOT WORKING)
+  # sc = SpellChecker() # only_replacements=True
+  # checked = []
+  # for section in result:
+  #   checked.append(sc.correction(section))
+  # print(checked)
 
-# Spell Checker
-# sc = Speller(only_replacements=True)
-# checked_result = []
-#
-# for unchecked in result:
-#   checked_result.append(sc(unchecked))
-#
-# print(checked_result)
+  input() # manual delay
